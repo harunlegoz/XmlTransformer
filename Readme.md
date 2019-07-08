@@ -1,4 +1,4 @@
-# XmlTransformer
+# Rahl.XmlTransformer
 A library to help ease the pain of transforming XML into JSON and CSV using XPath but not XSLT.
 
 ## What is it?
@@ -7,7 +7,7 @@ The library originated from a proof-of-concept where the objective was to use Az
 One option was to use Durable Azure Functions to transform XML but that required writing a custom function for every file type. Or, I could create a generic function that accepts the mapping through REST message body as JSON and do the transformation accordingly. This is the outcome of that PoC.
 
 ## Usage
-XmlTransformer is specifically built to transform array-structured XML files and them alone (at least for now). The supported XML structure should start with a root element and then an item repeating within the root element. It treats each element as an array item/record and converts it to target structure (JSON or CSV) record with or without a mapping.
+XmlTransformer is specifically built to transform array-structured XML files and them alone (at least for now). The supported XML structure should start with a root element and then an item repeating within the root element. It treats each element as an array item/record and transforms it to target structure (JSON or CSV) record with or without a mapping.
 
 The root element's attributes are also included within each target record, since the target is always treated as tabular. The same attributes will appear on each target record, allowing a consistent tabular structure.
 
@@ -64,44 +64,30 @@ Here's a sample JSON request:
 The library currently can transform XML into JSON and CSV. It has two modes:
 
 ### Direct Usage
-Converts entire XML into JSON and CSV, protecting its hierarchy. With JSON it's quite straightforward, but with CSV it's tricky. It combines the inner elements with "=" character to allow parsing the values later. You do direct transformation by _not_ providing mapping rules:
+Transforms entire XML into JSON and CSV, protecting its hierarchy. With JSON it's quite straightforward, but with CSV it's tricky. It combines the inner elements with "=" character to allow parsing the values later. You do direct transformation by _not_ providing mapping rules:
 
 ```csharp
 var input = "<items><item>A</item></items>";
-var outputBuilder = new StringBuilder();
-
-using (var inputReader = new StringReader(input))
-using (var outputWriter = new StringWriter(outputBuilder))
-{
-    var converter = new XmlToJsonConverter();
-    await converter.ConvertAsync(inputReader, outputWriter);
-}
-
-var output = outputBuilder.ToString();
+var transformer = new XmlToJsonTransformer();
+var output =  await transformer.TransformAsync(input);
 ```
 ### Mapping Usage
-Converts XML into JSON and CSV with the provided mapping values. This mode _always_ creates a tabular data format, even with JSON. You define your data type in your mapping like this:
+Transforms XML into JSON and CSV with the provided mapping values. This mode _always_ creates a tabular data format, even with JSON. You define your data type in your mapping like this:
 ```csharp
 var input = "<items attr1=\"A1\" attr2=\"A2\"><item>A</item><item>B</item><item>C</item><item>D</item><item>E</item></items>";
-var outputBuilder = new StringBuilder();
 
 // Act
-using (var inputReader = new StringReader(input))
-using (var outputWriter = new StringWriter(outputBuilder))
+var config = new TransformerConfiguration()
 {
-    var config = new ConversionConfiguration()
+    Mapping = new[]
     {
-        Mapping = new[]
-        {
-            new Map("attr1", "$/@attr1"),
-            new Map("attr2", "$/@attr2"),
-            new Map("value", "/text()")
-        }
-    };
-    var converter = new XmlToJsonConverter(config);
-    await converter.ConvertAsync(inputReader, outputWriter);
-}
-var output = outputBuilder.ToString();
+        new Map("attr1", "$/@attr1"),
+        new Map("attr2", "$/@attr2"),
+        new Map("value", "/text()")
+    }
+};
+var transformer = new XmlToJsonTransformer(config);
+var output =  await transformer.TransformAsync(input);
 ```
 The output json file will look like below:
 ```json
@@ -138,7 +124,7 @@ The output json file will look like below:
 Mapping is defined with field based XPath queries, with an additional option to define data type to make a type-safe transformation. Following mapping values are all valid:
 
 ```csharp
-var config = new ConversionConfiguration()
+var config = new TransformerConfiguration()
 {
     Mapping = new[]
     {
