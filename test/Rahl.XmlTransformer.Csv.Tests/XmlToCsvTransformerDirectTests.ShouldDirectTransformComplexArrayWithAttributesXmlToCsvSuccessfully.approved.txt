@@ -1,0 +1,3 @@
+﻿"_attr1","_attr2","prop1","prop2","prop3"
+"A1","A2","A","""prop21""=""B""|""prop22""=""C""","D|E|F|G"
+"A1","A2","A","""prop21""=""B""|""prop22""=""C""","D|E|F|G"

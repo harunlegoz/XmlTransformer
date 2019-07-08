@@ -1,0 +1,27 @@
+﻿[
+    {
+        "attr1": "A1",
+        "attr2": "A2",
+        "value": "A"
+    },
+    {
+        "attr1": "A1",
+        "attr2": "A2",
+        "value": "B"
+    },
+    {
+        "attr1": "A1",
+        "attr2": "A2",
+        "value": "C"
+    },
+    {
+        "attr1": "A1",
+        "attr2": "A2",
+        "value": "D"
+    },
+    {
+        "attr1": "A1",
+        "attr2": "A2",
+        "value": "E"
+    }
+]
