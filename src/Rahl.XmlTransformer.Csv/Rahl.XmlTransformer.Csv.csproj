@@ -9,7 +9,7 @@
     <Title>Rahl.XmlTransformer.Csv</Title>
     <Authors>Harun Legoz</Authors>
     <Company>Rahl Solutions</Company>
-    <RepositoryUrl>https://github.com/hylegoz/XmlTransformer</RepositoryUrl>
+    <RepositoryUrl>https://github.com/harunlegoz/XmlTransformer</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
