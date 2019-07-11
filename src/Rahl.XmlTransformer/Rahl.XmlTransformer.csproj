@@ -4,4 +4,11 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <PackageId>Rahl.XmlTransformer</PackageId>
+    <Title>Rahl.XmlTransformer</Title>
+    <Authors>Harun Legoz</Authors>
+    <Company>Rahl Solutions</Company>
+    <RepositoryUrl>https://github.com/hylegoz/XmlTransformer</RepositoryUrl>
+  </PropertyGroup>
 </Project>
